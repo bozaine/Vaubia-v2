@@ -1,37 +1,38 @@
 import React from 'react'
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import Home from './pages/Home.jsx'
-import Pricing from './pages/Pricing.jsx'
-import Login from './pages/Login.jsx'
-import Signup from './pages/Signup.jsx'
-import Dashboard from './pages/Dashboard.jsx'
-import Settings from './pages/Settings.jsx'
-import Contact from './pages/Contact.jsx'
-import Mentions from './pages/Legal/Mentions.jsx'
-import Confidentialite from './pages/Legal/Confidentialite.jsx'
-import CookiesPage from './pages/Legal/Cookies.jsx'
+import { Routes, Route, Link } from 'react-router-dom'
+import { I18nProvider, useI18n } from './i18n'
 
-function Protected({children}){
-  const loc = useLocation()
-  const authed = localStorage.getItem('vaubia_user')
-  if(!authed) return <Navigate to="/login" state={{ from: loc }} replace />
-  return children
+const Home = () => {
+  const { lang, toggleLang } = useI18n()
+  return (
+    <div style={{padding:'2rem', fontFamily:'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial'}}>
+      <header style={{display:'flex', gap:'1rem', alignItems:'center', justifyContent:'space-between'}}>
+        <nav style={{display:'flex', gap:'1rem'}}>
+          <Link to="/">Home</Link>
+          <Link to="/pricing">Pricing</Link>
+          <Link to="/login">Login</Link>
+        </nav>
+        <button onClick={toggleLang} aria-label="toggle language">
+          {lang === 'fr' ? 'FR' : 'EN'}
+        </button>
+      </header>
+      <h1>{lang === 'fr' ? 'Bonjour 👋' : 'Hello 👋'}</h1>
+      <p>{lang === 'fr' ? 'Build Vercel OK — i18n minimal' : 'Build Vercel OK — minimal i18n'}</p>
+    </div>
+  )
 }
+
+const Pricing = () => <div style={{padding:'2rem'}}>Pricing page</div>
+const Login = () => <div style={{padding:'2rem'}}>Login page</div>
 
 export default function App(){
   return (
-    <Routes>
-      <Route path="/" element={<Home/>} />
-      <Route path="/pricing" element={<Pricing/>} />
-      <Route path="/login" element={<Login/>} />
-      <Route path="/signup" element={<Signup/>} />
-      <Route path="/dashboard" element={<Protected><Dashboard/></Protected>} />
-      <Route path="/settings" element={<Protected><Settings/></Protected>} />
-      <Route path="/contact" element={<Contact/>} />
-      <Route path="/mentions-legales" element={<Mentions/>} />
-      <Route path="/politique-confidentialite" element={<Confidentialite/>} />
-      <Route path="/cookies" element={<CookiesPage/>} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <I18nProvider>
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/pricing" element={<Pricing/>} />
+        <Route path="/login" element={<Login/>} />
+      </Routes>
+    </I18nProvider>
   )
 }
