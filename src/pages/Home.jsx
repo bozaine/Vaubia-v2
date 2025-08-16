@@ -1,30 +1,20 @@
 import React from 'react'
-import Navbar from '../components/Navbar.jsx'
-import Topics from '../components/Topics.jsx'
-import { Link } from 'react-router-dom'
 import { useI18n } from '../i18n'
-
 export default function Home(){
   const { t } = useI18n()
   return (
-    <div>
-      <Navbar/>
-      <main className="container">
-        <section className="hero" aria-label="Présentation">
-          <span className="badge" style={{opacity:.8}}>Protégez l’essentiel</span>
-          <h1>{t('hero_title')}</h1>
-          <p>{t('hero_sub')}</p>
-          <div style={{display:'flex', gap:12, marginTop:10}}>
-            <Link className="btn primary" to="/signup">{t('start')}</Link>
-            <Link className="btn ghost" to="/pricing">{t('pricing')}</Link>
-          </div>
-          <Topics/>
-        </section>
-        <div style={{height:24}}/>
-      </main>
-      <footer className="container footer">
-        <small>© 2025 Vaubia — Protégez l’essentiel</small>
-      </footer>
-    </div>
+    <main className="hero">
+      <h1>{t('hero_title')}</h1>
+      <p>Surveillez vos comptes, détectez les fuites, recevez des alertes et suivez votre conformité simplement.</p>
+      <div className="cta">
+        <button className="btn">Commencer</button>
+        <button className="btn" style={{background:'#0c2230'}}>Voir une démo</button>
+      </div>
+      <section className="grid3">
+        <div className="card"><h3>Valeur</h3><p>Score de sécurité unifié et rapports clairs.</p></div>
+        <div className="card"><h3>Sécurité</h3><p>Blocage des tentatives & phishing en temps réel.</p></div>
+        <div className="card"><h3>Conformité</h3><p>Journal d’audit & modèles prêts à l’emploi.</p></div>
+      </section>
+    </main>
   )
 }

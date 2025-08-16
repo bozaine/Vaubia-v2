@@ -1,35 +1,26 @@
 import React, { useState } from 'react'
-import Navbar from '../components/Navbar.jsx'
-import { useLocation, useNavigate } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
+import { auth } from '../auth'
 export default function Login(){
-  const [email,setEmail]=useState('')
-  const [pass,setPass]=useState('')
-  const [err,setErr]=useState('')
-  const nav=useNavigate()
-  const loc=useLocation()
-  function submit(e){
+  const nav = useNavigate()
+  const [id, setId] = useState('admin')
+  const [pw, setPw] = useState('admin')
+  const [err, setErr] = useState('')
+  const submit = (e)=>{
     e.preventDefault()
-    if(email==='admin' && pass==='admin'){
-      localStorage.setItem('vaubia_user', JSON.stringify({ email, role:'admin' }))
-      const next = (loc.state && loc.state.from && loc.state.from.pathname) || '/dashboard'
-      nav(next); return
-    }
-    setErr('Identifiants invalides (essayez admin / admin)')
+    const res = auth.login(id, pw)
+    if(res.ok) nav('/dashboard')
+    else setErr(res.error)
   }
   return (
-    <div>
-      <Navbar/>
-      <main className="container">
-        <h1>Connexion</h1>
-        <form onSubmit={submit} className="card" style={{display:'grid', gap:12, maxWidth:420}}>
-          {err && <div className="badge" role="alert">{err}</div>}
-          <label>Email<input required type="email" value={email} onChange={e=>setEmail(e.target.value)} /></label>
-          <label>Mot de passe<input required type="password" value={pass} onChange={e=>setPass(e.target.value)} /></label>
-          <button className="btn primary">Se connecter</button>
-          <small>Identifiants démo : admin / admin</small>
-        </form>
-      </main>
-    </div>
+    <main className="hero">
+      <h2>Connexion</h2>
+      <form onSubmit={submit} className="card" style={{maxWidth:440}}>
+        <label>Identifiant<input value={id} onChange={e=>setId(e.target.value)} /></label>
+        <label>Mot de passe<input type="password" value={pw} onChange={e=>setPw(e.target.value)} /></label>
+        {err && <p style={{color:'#f88'}}>{err}</p>}
+        <button className="btn" type="submit">Se connecter</button>
+      </form>
+    </main>
   )
 }
